@@ -1,0 +1,13 @@
+body{
+    padding-top: 200px;
+    background-color: azure;
+}
+/* .column{
+    border: black solid;  
+} */
+.WhereQuestionGoes{
+    text-align: center;
+}
+.startButton {
+    text-align: center;
+}
