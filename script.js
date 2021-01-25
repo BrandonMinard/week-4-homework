@@ -20,35 +20,63 @@ if (!best) {
         initials: "",
         highScore: 0
     }
-    $(".highscore").text(0)
+    $(".highscore").text("0")
 } else {
     $(".highscore").text(best.initials + " " + best.highScore)
 }
 
 var questionsAndAnswers = [
     q1 = {
-        question: "What is a div",
+        question: "What is a div?",
         answers: ["A kind of scope", "when you want to divide elements",
             "A generic HTML tag", "When you make a mistake and want to div it away"],
         correctAnswer: "A generic HTML tag"
     },
-    q1 = {
-        question: "What is a div2",
-        answers: ["A kind of scope", "when you want to divide elements",
-            "A generic HTML tag", "When you make a mistake and want to div it away"],
-        correctAnswer: "A generic HTML tag"
+    q2 = {
+        question: "Which is not a primitive?",
+        answers: ["Object", "Number", "String", "Boolean"],
+        correctAnswer: "Object"
     },
-    q1 = {
-        question: "What is a div3",
-        answers: ["A kind of scope", "when you want to divide elements",
-            "A generic HTML tag", "When you make a mistake and want to div it away"],
-        correctAnswer: "A generic HTML tag"
+    q3 = {
+        question: "What is Truthiness?",
+        answers: ["A variable that tells the truth", "A variable that is evaluated as true",
+            "A variable that lies", "A boolean set to True"],
+        correctAnswer: "A variable that is evaluated as true"
     },
-    q1 = {
-        question: "What is a div4",
-        answers: ["A kind of scope", "when you want to divide elements",
-            "A generic HTML tag", "When you make a mistake and want to div it away"],
-        correctAnswer: "A generic HTML tag"
+    q4 = {
+        question: "What is an if statement?",
+        answers: ["A statement that asks a true or false question", "A statement that does something if you do something"],
+        correctAnswer: "A statement that asks a true or false question"
+    },
+    q5 = {
+        question: "What symbol is not used to represent a data type?",
+        answers: ["{}", "[]", "||", "\"\""],
+        correctAnswer: "||"
+    },
+    q6 = {
+        question: "How many times can you invoke a single method?",
+        answers: ["5", "10", "15", "infinite"],
+        correctAnswer: "infinite"
+    },
+    q7 = {
+        question: "Which is not a conventional HTML tag",
+        answers: ["Canvas", "img", "div", "Spleen"],
+        correctAnswer: "Spleen"
+    },
+    q8 = {
+        question: "What symbol(s) are used to check exact equality",
+        answers: [".equal()", "=", "==", "==="],
+        correctAnswer: "==="
+    },
+    q9 = {
+        question: "What does a function do when it is finished running, but has no return statement",
+        answers: ["returns undefined", "returns null", "returns 0", "nothing"],
+        correctAnswer: "returns undefined"
+    },
+    q10 = {
+        question: "Which is evaluated as true?",
+        answers: ["empty string", "an empty array", "the number 0"],
+        correctAnswer: "an empty array"
     },
 
 
