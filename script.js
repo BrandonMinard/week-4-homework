@@ -136,7 +136,7 @@ function setTime() {
             if (wins > best.highScore) {
                 saveScoreAndInitials()
             }
-        } else if (timeLeft === 0) {
+        } else if (timeLeft <= 0) {
             clearInterval(timerInterval);
             console.log("GAME OVER");
             deleteThoseSillyLittleButtons();
