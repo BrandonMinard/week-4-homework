@@ -7,13 +7,18 @@
 // make a generic prototype first
 
 // so add and remove things from a div?
+
+//initialize variables
 var wins = 0;
 var losses = 0;
 var highScore;
 var questionsAsked = 0;
 var timeLeft = 60;
 var curCorrect;
+
+//get high score and initials
 var best = JSON.parse(localStorage.getItem("bestAndInitials"));
+
 
 if (!best) {
     best = {
@@ -25,6 +30,7 @@ if (!best) {
     $(".highscore").text(best.initials + " " + best.highScore)
 }
 
+//questions list
 var questionsAndAnswers = [
     q1 = {
         question: "What is a div?",
@@ -89,9 +95,11 @@ var questionsAndAnswers = [
 ];
 
 
-//init
 
 
+//Function that takes a thing from the questions array and makes buttons from it
+//Also adds the question into the HTML
+//And returns the correct answer.
 function makeSomeSillyLittleButtons() {
     questionToGen = questionsAndAnswers[questionsAsked];
     question = questionToGen["question"]
@@ -112,13 +120,14 @@ function makeSomeSillyLittleButtons() {
     return correctAnswer;
 }
 
-
+//Just deletes all the buttons, I thought this would take more code, but it didn't.
 function deleteThoseSillyLittleButtons() {
     $(".buttons").empty()
 }
 
+//Set up the timer.
+//Add the current time left to the HTML
 function setTime() {
-    //showing the time we start at.
     $(".timer").text(timeLeft);
     var timerInterval = setInterval(function () {
         timeLeft--;
@@ -128,6 +137,8 @@ function setTime() {
 
         //showing the current time left.
         $(".timer").text(timeLeft);
+
+        //Game over conditions
         if (questionsAsked > (questionsAndAnswers.length - 1)) {
             clearInterval(timerInterval);
             console.log("GAME OVER");
@@ -149,6 +160,9 @@ function setTime() {
 
 }
 
+//Saves score and initials
+//initials must be 3 or fewer characters long.
+//Also puts the high score and initials in the HTML
 function saveScoreAndInitials() {
     console.log("high score!")
     var initials = prompt("You got a highScore please input your initials if you'd like to save it!\n Only allowed a max of 3 initials")
@@ -162,7 +176,9 @@ function saveScoreAndInitials() {
     $(".highscore").text(best.initials + " " + best.highScore);
 }
 
-//Gets data-answer from a button.
+//deals will all button clicks
+//either click the start button, clicking the right answer, or clicking the wrong answer.
+//In that order.
 $(".buttons").on("click", function (event) {
     console.log($(event.target).attr("data-answer"))
     if ("startingButton" === $(event.target).attr("data-answer")) {
@@ -176,7 +192,7 @@ $(".buttons").on("click", function (event) {
         deleteThoseSillyLittleButtons();
         curCorrect = makeSomeSillyLittleButtons();
     } else {
-        //subtract some time.
+        //subtract some time, but don't make it negative.
         if (timeLeft <= 10) {
             timeLeft = 0
         } else {
