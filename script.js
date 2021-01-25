@@ -177,7 +177,12 @@ $(".buttons").on("click", function (event) {
         curCorrect = makeSomeSillyLittleButtons();
     } else {
         //subtract some time.
-        timeLeft -= 10
+        if (timeLeft <= 0) {
+            timeLeft = 0
+        } else {
+            timeLeft -= 10
+        }
+
         $(".timer").text(timeLeft);
         losses++;
         $(".wrong").text(losses);
