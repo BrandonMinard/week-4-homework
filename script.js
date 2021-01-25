@@ -177,7 +177,7 @@ $(".buttons").on("click", function (event) {
         curCorrect = makeSomeSillyLittleButtons();
     } else {
         //subtract some time.
-        if (timeLeft <= 0) {
+        if (timeLeft <= 10) {
             timeLeft = 0
         } else {
             timeLeft -= 10
