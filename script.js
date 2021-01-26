@@ -13,13 +13,11 @@ var questionsAsked = 0;
 var timeLeft = 90;
 var curCorrect;
 var tenthsOfSeconds = 0;
-
+var deductionForWrong = 5;
 //show time to complete in seconds.
 $(".timer").text(timeLeft);
-
 //get high score and initials
 var best = JSON.parse(localStorage.getItem("bestAndInitials"));
-
 //Init basic high score variables
 if (!best) {
     best = {
@@ -95,9 +93,10 @@ var questionsAndAnswers = [
 ];
 
 //Function that takes a thing from the questions array and makes buttons from it
-//Also adds the question into the HTML
-//And returns the correct answer.
+//Also adds the question into the HTML and returns the correct answer.
 function makeSomeSillyLittleButtons() {
+    //remove present button(s)
+    $(".buttons").empty()
     //set variables
     questionToGen = questionsAndAnswers[questionsAsked];
     question = questionToGen["question"]
@@ -118,20 +117,12 @@ function makeSomeSillyLittleButtons() {
     //increment what question we are on
     questionsAsked++;
     //return the correct answer
-    //this could be hashed for more security, but eh.
     return correctAnswer;
 }
 
-//Just deletes all the buttons, I thought this would take more code, but it didn't.
-function deleteThoseSillyLittleButtons() {
-    $(".buttons").empty()
-}
-
 //Saves score and initials
-//initials must be 3 or fewer characters long.
 //Also puts the high score and initials in the HTML
 function saveScoreAndInitials() {
-    console.log("high score!")
     var initials = prompt("You got a highScore please input your initials if you'd like to save it!\n Only allowed a max of 3 initials")
     while (initials.length > 3) {
         alert("Try inputting initials again")
@@ -143,19 +134,13 @@ function saveScoreAndInitials() {
     $(".highscore").text(best.initials + " " + best.highScore);
 }
 
-//deals with all button clicks
-//either click the start button, clicking the right answer, or clicking the wrong answer.
-//In that order.
+//either click the start button, clicking the right answer, or clicking the wrong answer, in that order.
 $(".buttons").on("click", function (event) {
-    console.log($(event.target).attr("data-answer"))
     //put set interval within here, to make things easier
     //Checks win condition 10 times a second now
     if ("startingButton" === $(event.target).attr("data-answer")) {
-        deleteThoseSillyLittleButtons()
         curCorrect = makeSomeSillyLittleButtons()
-        // var timerInterval;
-        //within this need a counter that goes to 10.
-        //when it's counted to 10, update timerInterval.
+        //when it's counted to 9, update timerInterval.
         var timerInterval = setInterval(function () {
             //increment tenths of seconds since this runs 10 times a second.
             tenthsOfSeconds++;
@@ -175,39 +160,34 @@ $(".buttons").on("click", function (event) {
             100);
         //where things will end, and we update time left
         $(".timer").text(timeLeft)
-
         //these are our correct guess conditions
     } else if (curCorrect === $(event.target).attr("data-answer")) {
         //If we do good, we increment wins and set up buttons again
         wins++;
         $(".correct").text(wins);
-        deleteThoseSillyLittleButtons();
         curCorrect = makeSomeSillyLittleButtons();
     } else {
         //subtract some time, but don't make it negative.
         //End timerInterval if it's going to be less than 0.
-        if (timeLeft <= 5) {
+        if (timeLeft <= deductionForWrong) {
             clearInterval(timerInterval);
             timeLeft = 0
         } else {
-            timeLeft -= 5
+            timeLeft -= deductionForWrong
         }
         $(".timer").text(timeLeft);
         //if we increment losses, and set up buttons again.
         losses++;
         $(".wrong").text(losses);
-        deleteThoseSillyLittleButtons();
         curCorrect = makeSomeSillyLittleButtons();
     };
 })
 
 function gameOverCondition(timer, corrects) {
     clearInterval(timer);
-    console.log("GAME OVER");
-    deleteThoseSillyLittleButtons();
+    $(".buttons").empty();
     $(".WhereQuestionGoes").text("GAME OVER");
     if (corrects > best.highScore) {
-        saveScoreAndInitials()
+        saveScoreAndInitials();
     }
 }
-
