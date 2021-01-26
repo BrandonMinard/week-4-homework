@@ -127,38 +127,72 @@ function deleteThoseSillyLittleButtons() {
 
 //Set up the timer.
 //Add the current time left to the HTML
-function setTime() {
-    $(".timer").text(timeLeft);
-    var timerInterval = setInterval(function () {
-        timeLeft--;
-        console.log(timeLeft + " seconds left");
-        console.log(questionsAsked)
-        console.log(questionsAndAnswers.length - 1)
+// function setTime() {
+$(".timer").text(timeLeft);
+// var timerInterval;
+// // = setInterval(function () {
+// //     console.log("timerInterval= " + timerInterval)
+// //     timeLeft--;
+// //     console.log(timeLeft + " seconds left");
+// //     console.log(questionsAsked)
+// //     console.log(questionsAndAnswers.length - 1)
 
-        //showing the current time left.
-        $(".timer").text(timeLeft);
+// //     //showing the current time left.
+// //     $(".timer").text(timeLeft);
 
-        //Game over conditions
-        if (questionsAsked > (questionsAndAnswers.length - 1)) {
-            clearInterval(timerInterval);
-            console.log("GAME OVER");
-            deleteThoseSillyLittleButtons();
-            $(".WhereQuestionGoes").text("GAME OVER");
-            if (wins > best.highScore) {
-                saveScoreAndInitials()
-            }
-        } else if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            console.log("GAME OVER");
-            deleteThoseSillyLittleButtons();
-            $(".WhereQuestionGoes").text("GAME OVER");
-            if (wins > best.highScore) {
-                saveScoreAndInitials()
-            }
-        }
-    }, 1000);
+// //     //Game over conditions
+// //     if (questionsAsked > (questionsAndAnswers.length - 1)) {
+// //         clearInterval(timerInterval);
+// //         console.log("GAME OVER");
+// //         deleteThoseSillyLittleButtons();
+// //         $(".WhereQuestionGoes").text("GAME OVER");
+// //         if (wins > best.highScore) {
+// //             saveScoreAndInitials()
+// //         }
+// //     } else if (timeLeft <= 0) {
+// //         clearInterval(timerInterval);
+// //         console.log("GAME OVER");
+// //         deleteThoseSillyLittleButtons();
+// //         $(".WhereQuestionGoes").text("GAME OVER");
+// //         if (wins > best.highScore) {
+// //             saveScoreAndInitials()
+// //         }
+// //     }
+// // }, 1000);
 
-}
+// timerInterval = setInterval(function () {
+//     console.log("timerInterval= " + timerInterval)
+//     timeLeft--;
+//     console.log(timeLeft + " seconds left");
+//     console.log(questionsAsked)
+//     console.log(questionsAndAnswers.length - 1)
+
+//     //showing the current time left.
+//     $(".timer").text(timeLeft);
+
+//     //Game over conditions
+//     if (questionsAsked > (questionsAndAnswers.length - 1)) {
+//         clearInterval(timerInterval);
+//         console.log("GAME OVER");
+//         deleteThoseSillyLittleButtons();
+//         $(".WhereQuestionGoes").text("GAME OVER");
+//         if (wins > best.highScore) {
+//             saveScoreAndInitials()
+//         }
+//     } else if (timeLeft <= 0) {
+//         clearInterval(timerInterval);
+//         console.log("GAME OVER");
+//         deleteThoseSillyLittleButtons();
+//         $(".WhereQuestionGoes").text("GAME OVER");
+//         if (wins > best.highScore) {
+//             saveScoreAndInitials()
+//         }
+//     }
+// }, 1000);
+
+// }
+
+
 
 //Saves score and initials
 //initials must be 3 or fewer characters long.
@@ -181,10 +215,42 @@ function saveScoreAndInitials() {
 //In that order.
 $(".buttons").on("click", function (event) {
     console.log($(event.target).attr("data-answer"))
+    //put set interval within here.
+    //make it global n shit
     if ("startingButton" === $(event.target).attr("data-answer")) {
         deleteThoseSillyLittleButtons()
         curCorrect = makeSomeSillyLittleButtons()
-        setTime()
+        // setTime()
+        console.log(window)
+        console.log("timer" + window.timerInterval)
+        var timerInterval;
+        timerInterval = setInterval(function () {
+            console.log("timerInterval= " + timerInterval)
+            timeLeft--;
+            console.log(timeLeft + " seconds left");
+            $(".timer").text(timeLeft);
+
+            //Game over conditions
+            if (questionsAsked > (questionsAndAnswers.length - 1) || (timeLeft <= 0)) {
+                gameOverCondition(timerInterval, wins)
+                // clearInterval(timerInterval);
+                // console.log("GAME OVER");
+                // deleteThoseSillyLittleButtons();
+                // $(".WhereQuestionGoes").text("GAME OVER");
+                // if (wins > best.highScore) {
+                //     saveScoreAndInitials()
+                // }
+                // } else if (timeLeft <= 0) {
+                //     gameOverCondition(timerInterval, wins)
+                // clearInterval(timerInterval);
+                // console.log("GAME OVER");
+                // deleteThoseSillyLittleButtons();
+                // $(".WhereQuestionGoes").text("GAME OVER");
+                // if (wins > best.highScore) {
+                //     saveScoreAndInitials()
+                // }
+            }
+        }, 1000);
         $(".timer").text(timeLeft)
     } else if (curCorrect === $(event.target).attr("data-answer")) {
         wins++;
@@ -194,11 +260,11 @@ $(".buttons").on("click", function (event) {
     } else {
         //subtract some time, but don't make it negative.
         if (timeLeft <= 10) {
+            clearInterval(timerInterval);
             timeLeft = 0
         } else {
             timeLeft -= 10
         }
-
         $(".timer").text(timeLeft);
         losses++;
         $(".wrong").text(losses);
@@ -206,4 +272,16 @@ $(".buttons").on("click", function (event) {
         curCorrect = makeSomeSillyLittleButtons();
     };
 })
+
+
+
+function gameOverCondition(timer, corrects) {
+    clearInterval(timer);
+    console.log("GAME OVER");
+    deleteThoseSillyLittleButtons();
+    $(".WhereQuestionGoes").text("GAME OVER");
+    if (corrects > best.highScore) {
+        saveScoreAndInitials()
+    }
+}
 
