@@ -1,25 +1,26 @@
-// first and foremost, create a div with a button that starts things
-// also a timer.
-// then that makes some kind of multiple choice prompt with a question
-// when you answer the question, the next one comes up
-// timer for timer has to be globally scoped to subtract when wrong answer is given
-// have to have quite a few questions.
-// make a generic prototype first
-
-// so add and remove things from a div?
+//First we get variables existing.
+//Then we load high scores
+//Then we wait for start button to be pressed.
+//Then we iterate through questions
+//On every wrong question 5 sec are subtracted from timer
+//Game ends when you get through questions, or time ends.
 
 //initialize variables
 var wins = 0;
 var losses = 0;
 var highScore;
 var questionsAsked = 0;
-var timeLeft = 60;
+var timeLeft = 90;
 var curCorrect;
+var tenthsOfSeconds = 0;
+
+//show time to complete in seconds.
+$(".timer").text(timeLeft);
 
 //get high score and initials
 var best = JSON.parse(localStorage.getItem("bestAndInitials"));
 
-
+//Init basic high score variables
 if (!best) {
     best = {
         initials: "",
@@ -27,6 +28,7 @@ if (!best) {
     }
     $(".highscore").text("0")
 } else {
+    //Or render them if they exist
     $(".highscore").text(best.initials + " " + best.highScore)
 }
 
@@ -84,9 +86,7 @@ var questionsAndAnswers = [
         answers: ["empty string", "an empty array", "the number 0"],
         correctAnswer: "an empty array"
     },
-
-
-    //bad but, eh, it works
+    //Last question is the "Ender"
     gameOver = {
         question: "GAME OVER",
         answers: [],
@@ -94,16 +94,18 @@ var questionsAndAnswers = [
     }
 ];
 
-
 //Function that takes a thing from the questions array and makes buttons from it
 //Also adds the question into the HTML
 //And returns the correct answer.
 function makeSomeSillyLittleButtons() {
+    //set variables
     questionToGen = questionsAndAnswers[questionsAsked];
     question = questionToGen["question"]
     answers = questionToGen["answers"];
     correctAnswer = questionToGen["correctAnswer"];
+    //set question text
     $(".WhereQuestionGoes").text(question)
+    //makes buttons and append them.
     for (let i = 0; i < answers.length; i++) {
         var curAnswer = answers[i];
         var answerButton = $("<button>");
@@ -113,8 +115,10 @@ function makeSomeSillyLittleButtons() {
         answerButton.text(curAnswer);
         $(".buttons").append(answerButton);
     }
+    //increment what question we are on
     questionsAsked++;
-
+    //return the correct answer
+    //this could be hashed for more security, but eh.
     return correctAnswer;
 }
 
@@ -122,11 +126,6 @@ function makeSomeSillyLittleButtons() {
 function deleteThoseSillyLittleButtons() {
     $(".buttons").empty()
 }
-
-//Set up the timer.
-//Add the current time left to the HTML
-// function setTime() {
-$(".timer").text(timeLeft);
 
 //Saves score and initials
 //initials must be 3 or fewer characters long.
@@ -144,55 +143,63 @@ function saveScoreAndInitials() {
     $(".highscore").text(best.initials + " " + best.highScore);
 }
 
-//deals will all button clicks
+//deals with all button clicks
 //either click the start button, clicking the right answer, or clicking the wrong answer.
 //In that order.
 $(".buttons").on("click", function (event) {
     console.log($(event.target).attr("data-answer"))
-    //put set interval within here.
-    //make it global n shit
+    //put set interval within here, to make things easier
+    //Checks win condition 10 times a second now
     if ("startingButton" === $(event.target).attr("data-answer")) {
         deleteThoseSillyLittleButtons()
         curCorrect = makeSomeSillyLittleButtons()
-        // setTime()
-        console.log(window)
-        console.log("timer" + window.timerInterval)
-        var timerInterval;
-        timerInterval = setInterval(function () {
-            console.log("timerInterval= " + timerInterval)
-            timeLeft--;
-            console.log(timeLeft + " seconds left");
+        // var timerInterval;
+        //within this need a counter that goes to 10.
+        //when it's counted to 10, update timerInterval.
+        var timerInterval = setInterval(function () {
+            //increment tenths of seconds since this runs 10 times a second.
+            tenthsOfSeconds++;
+            //figure out when to increment the actualy interval
+            if (tenthsOfSeconds === 9) {
+                timeLeft--;
+                tenthsOfSeconds = 0;
+            }
+            //render interval
             $(".timer").text(timeLeft);
-
             //Game over conditions
             if (questionsAsked > (questionsAndAnswers.length - 1) || (timeLeft <= 0)) {
                 gameOverCondition(timerInterval, wins)
-
             }
-        }, 1000);
+        },
+            //interval is .1 seconds
+            100);
+        //where things will end, and we update time left
         $(".timer").text(timeLeft)
+
+        //these are our correct guess conditions
     } else if (curCorrect === $(event.target).attr("data-answer")) {
+        //If we do good, we increment wins and set up buttons again
         wins++;
         $(".correct").text(wins);
         deleteThoseSillyLittleButtons();
         curCorrect = makeSomeSillyLittleButtons();
     } else {
         //subtract some time, but don't make it negative.
-        if (timeLeft <= 10) {
+        //End timerInterval if it's going to be less than 0.
+        if (timeLeft <= 5) {
             clearInterval(timerInterval);
             timeLeft = 0
         } else {
-            timeLeft -= 10
+            timeLeft -= 5
         }
         $(".timer").text(timeLeft);
+        //if we increment losses, and set up buttons again.
         losses++;
         $(".wrong").text(losses);
         deleteThoseSillyLittleButtons();
         curCorrect = makeSomeSillyLittleButtons();
     };
 })
-
-
 
 function gameOverCondition(timer, corrects) {
     clearInterval(timer);
