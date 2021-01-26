@@ -95,8 +95,6 @@ var questionsAndAnswers = [
 ];
 
 
-
-
 //Function that takes a thing from the questions array and makes buttons from it
 //Also adds the question into the HTML
 //And returns the correct answer.
@@ -129,70 +127,6 @@ function deleteThoseSillyLittleButtons() {
 //Add the current time left to the HTML
 // function setTime() {
 $(".timer").text(timeLeft);
-// var timerInterval;
-// // = setInterval(function () {
-// //     console.log("timerInterval= " + timerInterval)
-// //     timeLeft--;
-// //     console.log(timeLeft + " seconds left");
-// //     console.log(questionsAsked)
-// //     console.log(questionsAndAnswers.length - 1)
-
-// //     //showing the current time left.
-// //     $(".timer").text(timeLeft);
-
-// //     //Game over conditions
-// //     if (questionsAsked > (questionsAndAnswers.length - 1)) {
-// //         clearInterval(timerInterval);
-// //         console.log("GAME OVER");
-// //         deleteThoseSillyLittleButtons();
-// //         $(".WhereQuestionGoes").text("GAME OVER");
-// //         if (wins > best.highScore) {
-// //             saveScoreAndInitials()
-// //         }
-// //     } else if (timeLeft <= 0) {
-// //         clearInterval(timerInterval);
-// //         console.log("GAME OVER");
-// //         deleteThoseSillyLittleButtons();
-// //         $(".WhereQuestionGoes").text("GAME OVER");
-// //         if (wins > best.highScore) {
-// //             saveScoreAndInitials()
-// //         }
-// //     }
-// // }, 1000);
-
-// timerInterval = setInterval(function () {
-//     console.log("timerInterval= " + timerInterval)
-//     timeLeft--;
-//     console.log(timeLeft + " seconds left");
-//     console.log(questionsAsked)
-//     console.log(questionsAndAnswers.length - 1)
-
-//     //showing the current time left.
-//     $(".timer").text(timeLeft);
-
-//     //Game over conditions
-//     if (questionsAsked > (questionsAndAnswers.length - 1)) {
-//         clearInterval(timerInterval);
-//         console.log("GAME OVER");
-//         deleteThoseSillyLittleButtons();
-//         $(".WhereQuestionGoes").text("GAME OVER");
-//         if (wins > best.highScore) {
-//             saveScoreAndInitials()
-//         }
-//     } else if (timeLeft <= 0) {
-//         clearInterval(timerInterval);
-//         console.log("GAME OVER");
-//         deleteThoseSillyLittleButtons();
-//         $(".WhereQuestionGoes").text("GAME OVER");
-//         if (wins > best.highScore) {
-//             saveScoreAndInitials()
-//         }
-//     }
-// }, 1000);
-
-// }
-
-
 
 //Saves score and initials
 //initials must be 3 or fewer characters long.
@@ -233,22 +167,7 @@ $(".buttons").on("click", function (event) {
             //Game over conditions
             if (questionsAsked > (questionsAndAnswers.length - 1) || (timeLeft <= 0)) {
                 gameOverCondition(timerInterval, wins)
-                // clearInterval(timerInterval);
-                // console.log("GAME OVER");
-                // deleteThoseSillyLittleButtons();
-                // $(".WhereQuestionGoes").text("GAME OVER");
-                // if (wins > best.highScore) {
-                //     saveScoreAndInitials()
-                // }
-                // } else if (timeLeft <= 0) {
-                //     gameOverCondition(timerInterval, wins)
-                // clearInterval(timerInterval);
-                // console.log("GAME OVER");
-                // deleteThoseSillyLittleButtons();
-                // $(".WhereQuestionGoes").text("GAME OVER");
-                // if (wins > best.highScore) {
-                //     saveScoreAndInitials()
-                // }
+
             }
         }, 1000);
         $(".timer").text(timeLeft)
